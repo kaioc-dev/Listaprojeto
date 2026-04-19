@@ -1,10 +1,10 @@
 :root {
-    --bg: #e3f2fd;        /* Azul claro */
-    --primary: #0284c7;   /* Azul oceano */
+    --bg-blue: #dcf0ff;   /* Azul claro vibrante */
+    --primary: #007bff;   /* Azul destaque */
     --white: #ffffff;
-    --text: #0f172a;
-    --danger: #ef4444;
-    --success: #10b981;
+    --text: #1a2b3c;
+    --success: #00c853;
+    --danger: #ff5252;
 }
 
 * {
@@ -15,57 +15,53 @@
 }
 
 body {
-    background-color: var(--bg);
+    background-color: var(--bg-blue);
+    padding: 20px;
     display: flex;
     justify-content: center;
-    padding: 20px;
 }
 
-.container {
+.app-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-h1 {
-    font-size: 2rem;
-    color: var(--text);
-}
-
+h1 { font-size: 2.2rem; color: var(--text); letter-spacing: -1.5px; }
 h1 span { color: var(--primary); }
 
-.btn-clear {
+.clear-btn {
     background: var(--danger);
     color: white;
     border: none;
     padding: 8px 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
+    border-radius: 10px;
+    font-weight: 800;
     font-size: 0.7rem;
+    cursor: pointer;
 }
 
-/* Caixa de Entrada */
-.input-box {
+/* Área de Entrada */
+.input-area {
     background: var(--white);
     display: flex;
-    padding: 10px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+    padding: 8px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
 }
 
-input {
+#todo-input {
     flex: 1;
     border: none;
     outline: none;
-    padding: 10px;
+    padding: 12px;
     font-size: 1.1rem;
     font-weight: 700;
 }
@@ -74,71 +70,80 @@ input {
     background: var(--primary);
     color: white;
     border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 12px;
-    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    font-size: 1.8rem;
+    font-weight: 800;
     cursor: pointer;
 }
 
-/* Lista */
-#shopping-list {
-    list-style: none;
-}
-
-.item {
+/* Estilo da Linha do Item */
+.item-row {
     background: var(--white);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     padding: 15px;
-    border-radius: 15px;
+    border-radius: 18px;
     display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    align-items: center; /* Alinha tudo no centro da linha verticalmente */
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
 }
 
-/* A Caixa de Marcação Lateral */
-.check-btn {
-    width: 30px;
-    height: 30px;
-    border: 3px solid #cbd5e1;
-    border-radius: 8px;
+/* Numeração */
+.item-number {
+    font-weight: 800;
+    color: var(--primary);
+    min-width: 25px;
+    font-size: 0.9rem;
+}
+
+/* Caixa de Marcação Lateral */
+.check-box {
+    width: 28px;
+    height: 28px;
+    border: 3px solid #e0e6ed;
+    border-radius: 9px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: 0.2s;
+    flex-shrink: 0; /* Impede que a caixa amasse */
 }
 
-.item.bought .check-btn {
+.item-row.done .check-box {
     background: var(--success);
     border-color: var(--success);
 }
 
-.item.bought .check-btn::after {
+.item-row.done .check-box::after {
     content: '✓';
     color: white;
     font-weight: 900;
 }
 
-.item-name {
+/* Texto do Item */
+.item-text {
     flex: 1;
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--text);
+    cursor: pointer;
 }
 
-.item.bought .item-name {
+.item-row.done .item-text {
     text-decoration: line-through;
-    color: #94a3b8;
+    color: #a0aec0;
 }
 
 .delete-btn {
     background: none;
     border: none;
-    color: #cbd5e1;
-    cursor: pointer;
+    color: #cbd5e0;
     font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
 }
 
 .delete-btn:hover { color: var(--danger); }
