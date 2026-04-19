@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,18 +9,21 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="app-card">
         <header>
-            <h1>Minha <span>Lista</span></h1>
-            <button id="clear-btn" class="clear-btn">Limpar Tudo</button>
+            <div class="logo">
+                <h1>Smart<span>List</span></h1>
+                <p id="current-date"></p>
+            </div>
+            <button id="clear-all" class="btn-clear">Limpar Tudo</button>
         </header>
 
-        <form id="input-form" class="input-area">
-            <input type="text" id="todo-input" placeholder="O que comprar?" autocomplete="off" required>
+        <form id="input-group" class="input-group">
+            <input type="text" id="item-input" placeholder="O que vais comprar?" autocomplete="off" required>
             <button type="submit" id="add-btn">+</button>
         </form>
 
-        <ul id="main-list" class="list-wrapper">
+        <ul id="shopping-list-ul">
             </ul>
     </div>
 
