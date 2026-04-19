@@ -3,35 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SmartList Pro</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>SmartList Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="app-container">
         <header>
-            <div class="logo">
-                <h1>S-<span>List</span></h1>
-                <div class="badge" id="total-badge">0</div>
-            </div>
-            <p>Seu assistente de compras clean</p>
+            <h1>Smart<span>List</span></h1>
+            <p id="date-text"></p>
         </header>
 
-        <div class="input-card">
-            <input type="text" id="main-input" placeholder="O que comprar?" autocomplete="off">
-            <button id="add-button">
+        <form id="todo-form" class="input-card">
+            <input type="text" id="todo-input" placeholder="O que comprar?" autocomplete="off" required>
+            <button type="submit" id="add-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
-        </div>
+        </form>
 
-        <ul id="list-render" class="list-container">
+        <ul id="items-list" class="list-container">
             </ul>
 
-        <div id="empty-state" class="empty-state">
-            <p>Tudo comprado por aqui! 🎉</p>
+        <div id="empty-msg" class="empty-state">
+            Sua lista está vazia.
         </div>
     </div>
 
