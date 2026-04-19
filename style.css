@@ -1,11 +1,10 @@
 :root {
-    --bg-blue: #e3f2fd; /* Azul claro vibrante */
-    --accent: #0061ff;  /* Azul elétrico */
+    --bg: #e3f2fd;        /* Azul claro */
+    --primary: #0284c7;   /* Azul oceano */
     --white: #ffffff;
-    --text: #1e293b;
+    --text: #0f172a;
+    --danger: #ef4444;
     --success: #10b981;
-    --danger: #f43f5e;
-    --shadow: 0 10px 25px rgba(0, 97, 255, 0.1);
 }
 
 * {
@@ -16,148 +15,130 @@
 }
 
 body {
-    background: var(--bg-blue);
-    color: var(--text);
-    padding: 20px;
+    background-color: var(--bg);
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    padding: 20px;
 }
 
-.app-container {
+.container {
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
 }
 
 header {
-    margin: 20px 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    letter-spacing: -2px;
+    font-size: 2rem;
+    color: var(--text);
 }
 
-h1 span { color: var(--accent); }
+h1 span { color: var(--primary); }
 
-header p {
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: capitalize;
+.btn-clear {
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.7rem;
 }
 
-/* Form de Entrada */
-.input-card {
+/* Caixa de Entrada */
+.input-box {
     background: var(--white);
-    padding: 8px;
-    border-radius: 20px;
     display: flex;
-    box-shadow: var(--shadow);
-    margin-bottom: 25px;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
 }
 
 input {
     flex: 1;
     border: none;
     outline: none;
-    padding: 15px;
+    padding: 10px;
     font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text);
-    background: transparent;
+    font-weight: 700;
 }
 
-button#add-btn {
-    background: var(--accent);
+#add-btn {
+    background: var(--primary);
     color: white;
     border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 16px;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    font-size: 1.5rem;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-button#add-btn:active { transform: scale(0.9); }
-
-/* Itens da Lista */
-.list-container {
+/* Lista */
+#shopping-list {
     list-style: none;
 }
 
-.item-row {
+.item {
     background: var(--white);
+    margin-bottom: 10px;
     padding: 15px;
-    border-radius: 18px;
-    margin-bottom: 12px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-    animation: pop 0.3s ease-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-@keyframes pop {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* CAIXA DE MARCAÇÃO (Check) */
-.check-box {
-    width: 28px;
-    height: 28px;
+/* A Caixa de Marcação Lateral */
+.check-btn {
+    width: 30px;
+    height: 30px;
     border: 3px solid #cbd5e1;
-    border-radius: 9px;
+    border-radius: 8px;
     cursor: pointer;
-    flex-shrink: 0;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: 0.2s;
 }
 
-.item-row.done .check-box {
+.item.bought .check-btn {
     background: var(--success);
     border-color: var(--success);
 }
 
-.item-row.done .check-box::after {
+.item.bought .check-btn::after {
     content: '✓';
-    position: absolute;
     color: white;
-    font-weight: 800;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    font-weight: 900;
 }
 
 .item-name {
     flex: 1;
     font-weight: 700;
     font-size: 1.1rem;
-    cursor: pointer;
+    color: var(--text);
 }
 
-.item-row.done .item-name {
+.item.bought .item-name {
     text-decoration: line-through;
     color: #94a3b8;
 }
 
-.btn-delete {
-    background: #fff1f2;
-    color: var(--danger);
+.delete-btn {
+    background: none;
     border: none;
-    padding: 8px;
-    border-radius: 10px;
+    color: #cbd5e1;
     cursor: pointer;
-    opacity: 0.6;
+    font-size: 1.2rem;
 }
 
-.btn-delete:hover { opacity: 1; }
-
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    color: #64748b;
-    font-weight: 600;
-}
+.delete-btn:hover { color: var(--danger); }
