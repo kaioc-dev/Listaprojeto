@@ -1,77 +1,80 @@
-const form = document.getElementById('input-group');
+// 1. Pegar os elementos da tela
 const input = document.getElementById('item-input');
-const listUl = document.getElementById('shopping-list-ul');
-const clearAllBtn = document.getElementById('clear-all');
-const dateLabel = document.getElementById('current-date');
+const btnAdd = document.getElementById('add-btn');
+const listaUl = document.getElementById('shopping-list-ul');
+const btnLimpar = document.getElementById('clear-all');
+const dataTxt = document.getElementById('current-date');
 
-// Exibe a data de hoje
+// 2. Mostrar a data de hoje
 const hoje = new Date();
-dateLabel.innerText = hoje.toLocaleDateString('pt-pt', { weekday: 'long', day: 'numeric', month: 'short' });
+dataTxt.innerText = hoje.toLocaleDateString('pt-br', { weekday: 'long', day: 'numeric' });
 
-// Estado da Lista (LocalStorage)
-let items = JSON.parse(localStorage.getItem('smartlist_vfinal')) || [];
+// 3. Banco de dados (carrega do celular ou começa vazio)
+let itens = JSON.parse(localStorage.getItem('lista_v5')) || [];
 
-function render() {
-    listUl.innerHTML = '';
+// 4. Função para desenhar a lista (RENDERIZAR)
+function atualizarTela() {
+    listaUl.innerHTML = '';
     
-    items.forEach((item, index) => {
+    itens.forEach((item, index) => {
         const li = document.createElement('li');
-        li.className = `list-item ${item.bought ? 'bought' : ''}`;
+        li.className = `list-item ${item.comprado ? 'bought' : ''}`;
         
-        // Estrutura solicitada: [Número] [Caixa] [Texto] [Remover]
         li.innerHTML = `
             <span class="item-num">${index + 1}.</span>
-            <div class="check-box" onclick="toggleItem(${index})"></div>
-            <span class="item-text" onclick="toggleItem(${index})">${item.name}</span>
-            <button class="delete-btn" onclick="deleteItem(${index})">✕</button>
+            <div class="check-box" onclick="marcarItem(${index})"></div>
+            <span class="item-text" onclick="marcarItem(${index})">${item.nome}</span>
+            <button class="delete-btn" onclick="deletarItem(${index})">✕</button>
         `;
         
-        listUl.appendChild(li);
+        listaUl.appendChild(li);
     });
 
-    localStorage.setItem('smartlist_vfinal', JSON.stringify(items));
+    localStorage.setItem('lista_v5', JSON.stringify(itens));
 }
 
-// Adicionar Novo Item
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const val = input.value.trim();
-    if (val) {
-        items.unshift({ name: val, bought: false });
-        input.value = '';
-        render();
-    }
-});
-
-// Marcar/Desmarcar como Comprado
-window.toggleItem = (index) => {
-    items[index].bought = !items[index].bought;
+// 5. FUNÇÃO PRINCIPAL: ADICIONAR ITEM
+function adicionarNovoItem() {
+    const nomeItem = input.value.trim();
     
-    // Pequena lógica de organização: ao marcar, vai para o fim da lista
-    if (items[index].bought) {
-        const itemMoved = items.splice(index, 1)[0];
-        items.push(itemMoved);
+    if (nomeItem !== "") {
+        // Adiciona no topo da lista
+        itens.unshift({ nome: nomeItem, comprado: false });
+        input.value = ""; // Limpa o campo
+        input.focus();    // Volta o cursor para o campo
+        atualizarTela();  // Desenha a lista de novo
     } else {
-        const itemMoved = items.splice(index, 1)[0];
-        items.unshift(itemMoved);
+        alert("Digite o nome de um produto!");
     }
-    
-    render();
+}
+
+// 6. Funções de marcar e deletar
+window.marcarItem = (index) => {
+    itens[index].comprado = !itens[index].comprado;
+    atualizarTela();
 };
 
-// Eliminar Item Único
-window.deleteItem = (index) => {
-    items.splice(index, 1);
-    render();
+window.deletarItem = (index) => {
+    itens.splice(index, 1);
+    atualizarTela();
 };
 
-// Limpar Tudo
-clearAllBtn.onclick = () => {
-    if (confirm("Desejas apagar todos os itens da lista?")) {
-        items = [];
-        render();
+// 7. Função de limpar tudo
+btnLimpar.onclick = () => {
+    if (confirm("Apagar toda a lista?")) {
+        itens = [];
+        atualizarTela();
     }
 };
 
-// Inicializar a lista
-render();
+// 8. EVENTOS (O que faz o botão funcionar)
+btnAdd.onclick = adicionarNovoItem; // Clique no botão +
+
+input.onkeypress = (e) => {         // Tecla Enter
+    if (e.key === 'Enter') {
+        adicionarNovoItem();
+    }
+};
+
+// Inicia a lista quando abre o app
+atualizarTela();
