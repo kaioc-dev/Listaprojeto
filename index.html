@@ -2,48 +2,38 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SmartList Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartList | Ultra Clean</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
-    <main class="app-container">
-        <header class="header">
-            <div class="title-area">
-                <h1>SmartList</h1>
-                <p>Organize suas compras com estilo</p>
+    <div class="app-wrapper">
+        <header>
+            <div class="brand">
+                <h1>Smart<span>List</span></h1>
+                <div class="status-dot"></div>
             </div>
-            <div class="stats-badge">
-                <span id="item-count">0</span>
-            </div>
+            <p id="date-display"></p>
         </header>
 
-        <section class="input-section">
-            <div class="glass-card input-group">
-                <input type="text" id="item-input" placeholder="O que vamos comprar hoje?" autocomplete="off">
-                <button id="add-btn">
-                    <span>Adicionar</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
-            </div>
+        <section class="input-container">
+            <input type="text" id="item-input" placeholder="O que vamos comprar?" maxlength="30">
+            <button id="add-btn" aria-label="Adicionar item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
         </section>
 
-        <section class="list-container">
-            <div id="empty-state" class="empty-state">
-                <div class="icon-circle">🛒</div>
-                <p>Sua lista está pronta para ser preenchida!</p>
-            </div>
-            
-            <ul id="shopping-list" class="item-list"></ul>
+        <section class="list-wrapper">
+            <ul id="shopping-list">
+                </ul>
         </section>
-    </main>
+        
+        <div id="empty-view" class="empty-view">
+            <p>Sua lista está limpa e organizada.</p>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
