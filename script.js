@@ -1,78 +1,87 @@
-// Seletores de Elementos
-const input = document.getElementById('main-input');
-const addBtn = document.getElementById('add-button');
-const listRender = document.getElementById('list-render');
-const totalBadge = document.getElementById('total-badge');
-const emptyState = document.getElementById('empty-state');
+// Seleção de elementos
+const todoForm = document.getElementById('todo-form');
+const todoInput = document.getElementById('todo-input');
+const itemsList = document.getElementById('items-list');
+const emptyMsg = document.getElementById('empty-msg');
+const dateText = document.getElementById('date-text');
 
-// Banco de Dados Local
-let shoppingItems = JSON.parse(localStorage.getItem('smartlist_data')) || [];
+// Exibir data
+const now = new Date();
+dateText.innerText = now.toLocaleDateString('pt-br', { weekday: 'long', day: 'numeric', month: 'short' });
 
-// Função para atualizar tudo
-const updateUI = () => {
-    localStorage.setItem('smartlist_data', JSON.stringify(shoppingItems));
+// Estado da aplicação (carrega do LocalStorage)
+let shoppingList = JSON.parse(localStorage.getItem('my_premium_list')) || [];
+
+// Salvar no navegador
+function saveToStorage() {
+    localStorage.setItem('my_premium_list', JSON.stringify(shoppingList));
+    render();
+}
+
+// Renderizar a lista na tela
+function render() {
+    itemsList.innerHTML = '';
     
-    // Limpar lista atual
-    listRender.innerHTML = '';
-    
-    // Verificar se está vazio
-    if (shoppingItems.length === 0) {
-        emptyState.style.display = 'block';
-        totalBadge.innerText = '0';
+    if (shoppingList.length === 0) {
+        emptyMsg.style.display = 'block';
     } else {
-        emptyState.style.display = 'none';
-        totalBadge.innerText = shoppingItems.length;
+        emptyMsg.style.display = 'none';
         
-        // Renderizar itens
-        shoppingItems.forEach((item, index) => {
+        shoppingList.forEach((item, index) => {
             const li = document.createElement('li');
-            li.className = `item ${item.checked ? 'checked' : ''}`;
+            li.className = `item-row ${item.done ? 'done' : ''}`;
+            li.setAttribute('data-index', index);
             
             li.innerHTML = `
-                <div class="check-box" onclick="toggleItem(${index})"></div>
-                <span class="item-name" onclick="toggleItem(${index})">${item.name}</span>
-                <button class="delete-btn" onclick="removeItem(${index})">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <div class="check-box js-check"></div>
+                <span class="item-name js-check">${item.text}</span>
+                <button class="btn-delete js-delete">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 </button>
             `;
-            listRender.appendChild(li);
+            itemsList.appendChild(li);
         });
     }
-};
+}
 
-// Adicionar Item
-const addItem = () => {
-    const value = input.value.trim();
-    if (value) {
-        shoppingItems.unshift({ name: value, checked: false });
-        input.value = '';
-        updateUI();
-        if (navigator.vibrate) navigator.vibrate(10);
-    }
-};
-
-// Alternar Check
-window.toggleItem = (index) => {
-    shoppingItems[index].checked = !shoppingItems[index].checked;
+// Evento: Adicionar item
+todoForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = todoInput.value.trim();
     
-    // Sort automático: Mandar checados para o fim após animação
-    setTimeout(() => {
-        shoppingItems.sort((a, b) => a.checked - b.checked);
-        updateUI();
-    }, 200);
-};
+    if (text !== '') {
+        shoppingList.unshift({ text: text, done: false });
+        todoInput.value = '';
+        saveToStorage();
+    }
+});
 
-// Remover Item
-window.removeItem = (index) => {
-    shoppingItems.splice(index, 1);
-    updateUI();
-};
+// Evento: Clique na Lista (Check ou Delete) - Delegação de Eventos
+itemsList.addEventListener('click', (e) => {
+    const target = e.target;
+    const parent = target.closest('.item-row');
+    if (!parent) return;
+    
+    const index = parent.getAttribute('data-index');
 
-// Eventos de Teclado e Clique
-addBtn.addEventListener('click', addItem);
-input.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addItem();
+    // Se clicou na caixa de check ou no nome do item
+    if (target.classList.contains('js-check')) {
+        shoppingList[index].done = !shoppingList[index].done;
+        
+        // Mover para o final se estiver pronto
+        if (shoppingList[index].done) {
+            const item = shoppingList.splice(index, 1)[0];
+            shoppingList.push(item);
+        }
+        saveToStorage();
+    }
+
+    // Se clicou no botão de deletar
+    if (target.closest('.js-delete')) {
+        shoppingList.splice(index, 1);
+        saveToStorage();
+    }
 });
 
 // Inicialização
-updateUI();
+render();
