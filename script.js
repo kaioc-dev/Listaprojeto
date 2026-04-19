@@ -1,67 +1,72 @@
-const input = document.getElementById('item-input');
-const addBtn = document.getElementById('add-btn');
-const listUl = document.getElementById('shopping-list');
-const clearAllBtn = document.getElementById('clear-all');
+const form = document.getElementById('input-form');
+const input = document.getElementById('todo-input');
+const listElement = document.getElementById('main-list');
+const clearBtn = document.getElementById('clear-btn');
 
-// Carregar itens salvos ou começar lista vazia
-let items = JSON.parse(localStorage.getItem('minha_lista_compras')) || [];
+// Carrega dados ou inicia vazio
+let items = JSON.parse(localStorage.getItem('smartlist_data_v3')) || [];
 
-// Função para desenhar a lista na tela
 function render() {
-    listUl.innerHTML = '';
+    listElement.innerHTML = '';
     
     items.forEach((item, index) => {
         const li = document.createElement('li');
-        li.className = `item ${item.bought ? 'bought' : ''}`;
+        li.className = `item-row ${item.done ? 'done' : ''}`;
         
+        // Estrutura: Número | Caixa | Texto | Deletar
         li.innerHTML = `
-            <div class="check-btn" onclick="toggleItem(${index})"></div>
-            <span class="item-name" onclick="toggleItem(${index})">${item.name}</span>
+            <span class="item-number">${index + 1}.</span>
+            <div class="check-box" onclick="toggleItem(${index})"></div>
+            <span class="item-text" onclick="toggleItem(${index})">${item.name}</span>
             <button class="delete-btn" onclick="deleteItem(${index})">✕</button>
         `;
         
-        listUl.appendChild(li);
+        listElement.appendChild(li);
     });
 
-    // Salvar no navegador
-    localStorage.setItem('minha_lista_compras', JSON.stringify(items));
+    localStorage.setItem('smartlist_data_v3', JSON.stringify(items));
 }
 
-// Função: Adicionar Item
-function addItem() {
+// Adicionar Item
+form.onsubmit = (e) => {
+    e.preventDefault();
     const text = input.value.trim();
-    if (text !== "") {
-        items.unshift({ name: text, bought: false });
+    if (text) {
+        items.unshift({ name: text, done: false });
         input.value = '';
         render();
     }
-}
+};
 
-// Função: Marcar como Comprado
+// Marcar/Desmarcar
 window.toggleItem = (index) => {
-    items[index].bought = !items[index].bought;
+    items[index].done = !items[index].done;
+    
+    // Opcional: Reordenar (comprados vão para o fim)
+    if (items[index].done) {
+        const item = items.splice(index, 1)[0];
+        items.push(item);
+    } else {
+        const item = items.splice(index, 1)[0];
+        items.unshift(item);
+    }
+    
     render();
 };
 
-// Função: Deletar Item Único
+// Deletar Único
 window.deleteItem = (index) => {
     items.splice(index, 1);
     render();
 };
 
-// Função: Limpar Toda a Lista
-clearAllBtn.onclick = () => {
-    if (confirm("Deseja limpar toda a lista?")) {
+// Limpar Tudo
+clearBtn.onclick = () => {
+    if (confirm("Limpar toda a lista?")) {
         items = [];
         render();
     }
 };
 
-// Escutar o botão de adicionar e a tecla Enter
-addBtn.onclick = addItem;
-input.onkeypress = (e) => {
-    if (e.key === 'Enter') addItem();
-};
-
-// Iniciar a lista ao abrir a página
+// Inicializar
 render();
