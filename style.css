@@ -1,6 +1,6 @@
 :root {
-    --bg-blue: #e3f2fd;    /* Azul claro vibrante */
-    --primary: #007bff;    /* Azul de destaque */
+    --bg-blue: #e3f2fd;
+    --primary: #007bff;
     --white: #ffffff;
     --text: #1e293b;
     --success: #10b981;
@@ -8,154 +8,44 @@
     --border: #cbd5e1;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Sora', sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
-body {
-    background-color: var(--bg-blue);
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    min-height: 100vh;
-}
+body { background-color: var(--bg-blue); display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
 
-.app-card {
-    width: 100%;
-    max-width: 450px;
-}
+.app-card { width: 100%; max-width: 450px; }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 25px;
-}
+header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
 
 h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); letter-spacing: -1.5px; }
 h1 span { color: var(--primary); }
 
 #current-date { font-size: 0.85rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
 
-.btn-clear {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 0.7rem;
-    cursor: pointer;
-}
+.btn-clear { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 10px; font-weight: 800; font-size: 0.7rem; cursor: pointer; }
 
-/* Campo de Entrada */
-.input-group {
-    background: var(--white);
-    display: flex;
-    padding: 8px;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-    margin-bottom: 30px;
-}
+.input-group { background: var(--white); display: flex; padding: 8px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
 
-#item-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 12px 15px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text);
-}
+#item-input { flex: 1; border: none; outline: none; padding: 12px 15px; font-size: 1.1rem; font-weight: 700; color: var(--text); }
 
-#add-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 15px;
-    font-size: 1.8rem;
-    font-weight: 800;
-    cursor: pointer;
-}
+#add-btn { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; font-size: 1.8rem; font-weight: 800; cursor: pointer; }
 
-/* LINHA DO ITEM - ALINHAMENTO LADO A LADO */
-.list-item {
-    background: var(--white);
-    margin-bottom: 12px;
-    padding: 16px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center; /* Alinha todos os elementos ao centro da linha */
-    gap: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-}
+/* LINHA DO ITEM */
+.list-item { background: var(--white); margin-bottom: 12px; padding: 16px; border-radius: 18px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
 
-/* 1. Numeração */
-.item-num {
-    font-weight: 800;
-    color: var(--primary);
-    min-width: 30px;
-    font-size: 0.9rem;
-}
+.item-num { font-weight: 800; color: var(--primary); min-width: 30px; font-size: 0.9rem; }
 
-/* 2. CAIXINHA DE MARCAÇÃO (O CORAÇÃO DO APP) */
-.check-box {
-    width: 30px;
-    height: 30px;
-    border: 3px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    flex-shrink: 0; /* Garante que a caixa não seja espremida */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
+.check-box { width: 30px; height: 30px; border: 3px solid var(--border); border-radius: 10px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
 
-.list-item.bought .check-box {
-    background-color: var(--success);
-    border-color: var(--success);
-}
+.list-item.bought .check-box { background-color: var(--success); border-color: var(--success); }
 
-.check-box::after {
-    content: '✓';
-    color: white;
-    font-weight: 900;
-    font-size: 1.2rem;
-    display: none;
-}
+.check-box::after { content: '✓'; color: white; font-weight: 900; font-size: 1.2rem; display: none; }
 
-.list-item.bought .check-box::after {
-    display: block;
-}
+.list-item.bought .check-box::after { display: block; }
 
-/* 3. Texto do Item */
-.item-text {
-    flex: 1;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--text);
-    cursor: pointer;
-}
+.item-text { flex: 1; font-weight: 700; font-size: 1.1rem; color: var(--text); cursor: pointer; }
 
-.list-item.bought .item-text {
-    text-decoration: line-through;
-    color: #94a3b8;
-}
+.list-item.bought .item-text { text-decoration: line-through; color: #94a3b8; }
 
-/* 4. Botão de Eliminar */
-.delete-btn {
-    background: none;
-    border: none;
-    color: #cbd5e1;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 5px;
-}
+.delete-btn { background: none; border: none; color: #cbd5e1; font-size: 1.2rem; cursor: pointer; padding: 5px; }
 
 .delete-btn:hover { color: var(--danger); }
