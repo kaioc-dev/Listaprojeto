@@ -2,25 +2,25 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Compras Simples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SmartList Pro</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
+    <div class="app-container">
         <header>
             <h1>Minha <span>Lista</span></h1>
-            <button id="clear-all" class="btn-clear">Limpar Tudo</button>
+            <button id="clear-btn" class="clear-btn">Limpar Tudo</button>
         </header>
 
-        <div class="input-box">
-            <input type="text" id="item-input" placeholder="O que comprar?" autocomplete="off">
-            <button id="add-btn">+</button>
-        </div>
+        <form id="input-form" class="input-area">
+            <input type="text" id="todo-input" placeholder="O que comprar?" autocomplete="off" required>
+            <button type="submit" id="add-btn">+</button>
+        </form>
 
-        <ul id="shopping-list">
+        <ul id="main-list" class="list-wrapper">
             </ul>
     </div>
 
