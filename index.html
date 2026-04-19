@@ -2,32 +2,26 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SmartList Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras Simples</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="container">
         <header>
-            <h1>Smart<span>List</span></h1>
-            <p id="date-text"></p>
+            <h1>Minha <span>Lista</span></h1>
+            <button id="clear-all" class="btn-clear">Limpar Tudo</button>
         </header>
 
-        <form id="todo-form" class="input-card">
-            <input type="text" id="todo-input" placeholder="O que comprar?" autocomplete="off" required>
-            <button type="submit" id="add-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            </button>
-        </form>
-
-        <ul id="items-list" class="list-container">
-            </ul>
-
-        <div id="empty-msg" class="empty-state">
-            Sua lista está vazia.
+        <div class="input-box">
+            <input type="text" id="item-input" placeholder="O que comprar?" autocomplete="off">
+            <button id="add-btn">+</button>
         </div>
+
+        <ul id="shopping-list">
+            </ul>
     </div>
 
     <script src="script.js"></script>
