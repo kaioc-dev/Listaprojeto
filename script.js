@@ -1,87 +1,67 @@
-// Seleção de elementos
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const itemsList = document.getElementById('items-list');
-const emptyMsg = document.getElementById('empty-msg');
-const dateText = document.getElementById('date-text');
+const input = document.getElementById('item-input');
+const addBtn = document.getElementById('add-btn');
+const listUl = document.getElementById('shopping-list');
+const clearAllBtn = document.getElementById('clear-all');
 
-// Exibir data
-const now = new Date();
-dateText.innerText = now.toLocaleDateString('pt-br', { weekday: 'long', day: 'numeric', month: 'short' });
+// Carregar itens salvos ou começar lista vazia
+let items = JSON.parse(localStorage.getItem('minha_lista_compras')) || [];
 
-// Estado da aplicação (carrega do LocalStorage)
-let shoppingList = JSON.parse(localStorage.getItem('my_premium_list')) || [];
-
-// Salvar no navegador
-function saveToStorage() {
-    localStorage.setItem('my_premium_list', JSON.stringify(shoppingList));
-    render();
-}
-
-// Renderizar a lista na tela
+// Função para desenhar a lista na tela
 function render() {
-    itemsList.innerHTML = '';
+    listUl.innerHTML = '';
     
-    if (shoppingList.length === 0) {
-        emptyMsg.style.display = 'block';
-    } else {
-        emptyMsg.style.display = 'none';
+    items.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = `item ${item.bought ? 'bought' : ''}`;
         
-        shoppingList.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = `item-row ${item.done ? 'done' : ''}`;
-            li.setAttribute('data-index', index);
-            
-            li.innerHTML = `
-                <div class="check-box js-check"></div>
-                <span class="item-name js-check">${item.text}</span>
-                <button class="btn-delete js-delete">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                </button>
-            `;
-            itemsList.appendChild(li);
-        });
+        li.innerHTML = `
+            <div class="check-btn" onclick="toggleItem(${index})"></div>
+            <span class="item-name" onclick="toggleItem(${index})">${item.name}</span>
+            <button class="delete-btn" onclick="deleteItem(${index})">✕</button>
+        `;
+        
+        listUl.appendChild(li);
+    });
+
+    // Salvar no navegador
+    localStorage.setItem('minha_lista_compras', JSON.stringify(items));
+}
+
+// Função: Adicionar Item
+function addItem() {
+    const text = input.value.trim();
+    if (text !== "") {
+        items.unshift({ name: text, bought: false });
+        input.value = '';
+        render();
     }
 }
 
-// Evento: Adicionar item
-todoForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const text = todoInput.value.trim();
-    
-    if (text !== '') {
-        shoppingList.unshift({ text: text, done: false });
-        todoInput.value = '';
-        saveToStorage();
+// Função: Marcar como Comprado
+window.toggleItem = (index) => {
+    items[index].bought = !items[index].bought;
+    render();
+};
+
+// Função: Deletar Item Único
+window.deleteItem = (index) => {
+    items.splice(index, 1);
+    render();
+};
+
+// Função: Limpar Toda a Lista
+clearAllBtn.onclick = () => {
+    if (confirm("Deseja limpar toda a lista?")) {
+        items = [];
+        render();
     }
-});
+};
 
-// Evento: Clique na Lista (Check ou Delete) - Delegação de Eventos
-itemsList.addEventListener('click', (e) => {
-    const target = e.target;
-    const parent = target.closest('.item-row');
-    if (!parent) return;
-    
-    const index = parent.getAttribute('data-index');
+// Escutar o botão de adicionar e a tecla Enter
+addBtn.onclick = addItem;
+input.onkeypress = (e) => {
+    if (e.key === 'Enter') addItem();
+};
 
-    // Se clicou na caixa de check ou no nome do item
-    if (target.classList.contains('js-check')) {
-        shoppingList[index].done = !shoppingList[index].done;
-        
-        // Mover para o final se estiver pronto
-        if (shoppingList[index].done) {
-            const item = shoppingList.splice(index, 1)[0];
-            shoppingList.push(item);
-        }
-        saveToStorage();
-    }
-
-    // Se clicou no botão de deletar
-    if (target.closest('.js-delete')) {
-        shoppingList.splice(index, 1);
-        saveToStorage();
-    }
-});
-
-// Inicialização
+// Iniciar a lista ao abrir a página
 render();
