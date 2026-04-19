@@ -1,72 +1,77 @@
-const form = document.getElementById('input-form');
-const input = document.getElementById('todo-input');
-const listElement = document.getElementById('main-list');
-const clearBtn = document.getElementById('clear-btn');
+const form = document.getElementById('input-group');
+const input = document.getElementById('item-input');
+const listUl = document.getElementById('shopping-list-ul');
+const clearAllBtn = document.getElementById('clear-all');
+const dateLabel = document.getElementById('current-date');
 
-// Carrega dados ou inicia vazio
-let items = JSON.parse(localStorage.getItem('smartlist_data_v3')) || [];
+// Exibe a data de hoje
+const hoje = new Date();
+dateLabel.innerText = hoje.toLocaleDateString('pt-pt', { weekday: 'long', day: 'numeric', month: 'short' });
+
+// Estado da Lista (LocalStorage)
+let items = JSON.parse(localStorage.getItem('smartlist_vfinal')) || [];
 
 function render() {
-    listElement.innerHTML = '';
+    listUl.innerHTML = '';
     
     items.forEach((item, index) => {
         const li = document.createElement('li');
-        li.className = `item-row ${item.done ? 'done' : ''}`;
+        li.className = `list-item ${item.bought ? 'bought' : ''}`;
         
-        // Estrutura: Número | Caixa | Texto | Deletar
+        // Estrutura solicitada: [Número] [Caixa] [Texto] [Remover]
         li.innerHTML = `
-            <span class="item-number">${index + 1}.</span>
+            <span class="item-num">${index + 1}.</span>
             <div class="check-box" onclick="toggleItem(${index})"></div>
             <span class="item-text" onclick="toggleItem(${index})">${item.name}</span>
             <button class="delete-btn" onclick="deleteItem(${index})">✕</button>
         `;
         
-        listElement.appendChild(li);
+        listUl.appendChild(li);
     });
 
-    localStorage.setItem('smartlist_data_v3', JSON.stringify(items));
+    localStorage.setItem('smartlist_vfinal', JSON.stringify(items));
 }
 
-// Adicionar Item
-form.onsubmit = (e) => {
+// Adicionar Novo Item
+form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const text = input.value.trim();
-    if (text) {
-        items.unshift({ name: text, done: false });
+    const val = input.value.trim();
+    if (val) {
+        items.unshift({ name: val, bought: false });
         input.value = '';
         render();
     }
-};
+});
 
-// Marcar/Desmarcar
+// Marcar/Desmarcar como Comprado
 window.toggleItem = (index) => {
-    items[index].done = !items[index].done;
+    items[index].bought = !items[index].bought;
     
-    // Opcional: Reordenar (comprados vão para o fim)
-    if (items[index].done) {
-        const item = items.splice(index, 1)[0];
-        items.push(item);
+    // Pequena lógica de organização: ao marcar, vai para o fim da lista
+    if (items[index].bought) {
+        const itemMoved = items.splice(index, 1)[0];
+        items.push(itemMoved);
     } else {
-        const item = items.splice(index, 1)[0];
-        items.unshift(item);
+        const itemMoved = items.splice(index, 1)[0];
+        items.unshift(itemMoved);
     }
     
     render();
 };
 
-// Deletar Único
+// Eliminar Item Único
 window.deleteItem = (index) => {
     items.splice(index, 1);
     render();
 };
 
 // Limpar Tudo
-clearBtn.onclick = () => {
-    if (confirm("Limpar toda a lista?")) {
+clearAllBtn.onclick = () => {
+    if (confirm("Desejas apagar todos os itens da lista?")) {
         items = [];
         render();
     }
 };
 
-// Inicializar
+// Inicializar a lista
 render();
