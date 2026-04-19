@@ -1,255 +1,193 @@
 :root {
-    --primary: #0062ff;
-    --primary-light: #e0f2fe;
-    --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #d0e7ff 100%);
-    --glass: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.4);
-    --text-dark: #0f172a;
-    --text-muted: #64748b;
+    --bg-main: #e0f2fe; /* Azul claro vibrante */
+    --accent: #0284c7;  /* Azul oceano para detalhes */
+    --white: #ffffff;
+    --text-main: #0c4a6e;
+    --text-muted: #7dd3fc;
     --success: #10b981;
-    --danger: #ff4757;
-    --shadow: 0 10px 30px rgba(0, 98, 255, 0.1);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.15);
 }
 
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-sizing: border-box;
+    font-family: 'Sora', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background: var(--bg-gradient);
+    background-color: var(--bg-main);
+    background-image: radial-gradient(at 0% 0%, hsla(201,100%,85%,1) 0, transparent 50%), 
+                      radial-gradient(at 50% 100%, hsla(201,100%,92%,1) 0, transparent 50%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    color: var(--text-dark);
-    overflow-x: hidden;
+    padding: 20px;
 }
 
-/* Decoração de fundo */
-.background-blobs {
-    position: fixed;
-    top: 0;
-    left: 0;
+.app-wrapper {
     width: 100%;
-    height: 100%;
-    z-index: -1;
-    filter: blur(80px);
-}
-
-.blob {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    opacity: 0.5;
-}
-
-.blob-1 { background: #60a5fa; top: -50px; right: -50px; }
-.blob-2 { background: #93c5fd; bottom: -50px; left: -50px; }
-
-.app-container {
-    width: 100%;
-    max-width: 450px;
-    padding: 40px 20px;
-    z-index: 1;
+    max-width: 420px;
+    margin-top: 40px;
 }
 
 /* Header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header {
     margin-bottom: 30px;
 }
 
-.header h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    background: linear-gradient(to right, #0062ff, #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.header p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.stats-badge {
-    background: var(--primary);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+.brand {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    box-shadow: 0 4px 12px rgba(0, 98, 255, 0.3);
-}
-
-/* Input Card */
-.glass-card {
-    background: var(--glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 10px;
-    box-shadow: var(--shadow);
-}
-
-.input-group {
-    display: flex;
     gap: 10px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -2px;
+}
+
+h1 span {
+    color: var(--accent);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--success);
+}
+
+header p {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Input Area */
+.input-container {
+    background: var(--white);
+    padding: 10px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    box-shadow: var(--shadow);
+    border: 2px solid transparent;
+    transition: 0.3s;
+    margin-bottom: 25px;
+}
+
+.input-container:focus-within {
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
 
 input {
     flex: 1;
-    background: transparent;
     border: none;
-    padding: 15px;
-    font-size: 1rem;
-    font-weight: 600;
     outline: none;
-    color: var(--text-dark);
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
 }
 
 button#add-btn {
-    background: var(--primary);
+    background: var(--accent);
     color: white;
     border: none;
-    padding: 0 20px;
-    border-radius: 15px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: grid;
+    place-items: center;
+    transition: 0.3s;
 }
 
-button#add-btn:active { transform: scale(0.95); }
+button#add-btn:hover { background: var(--text-main); }
 
-button#add-btn span { display: none; } /* Ocultar texto no mobile */
-
-@media (min-width: 400px) {
-    button#add-btn span { display: inline; }
-}
-
-/* List Style */
-.item-list {
-    list-style: none;
-    margin-top: 25px;
-}
-
-.item-node {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 18px;
-    padding: 18px;
-    margin-bottom: 12px;
+/* List Item */
+.item-card {
+    background: var(--white);
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-    animation: fadeIn 0.4s ease-out;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
-/* Checkbox estilizado (a "caixa de texto" ao lado) */
-.check-wrapper {
-    position: relative;
-    width: 28px;
-    height: 28px;
-}
-
-.check-wrapper input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-}
-
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 28px;
-    width: 28px;
-    background-color: white;
-    border: 2px solid #cbd5e1;
+/* A "Caixa de Marcação" ao lado */
+.check-container {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--bg-main);
     border-radius: 10px;
-    transition: all 0.2s;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: 0.3s;
+    flex-shrink: 0;
 }
 
-.check-wrapper input:checked ~ .checkmark {
-    background-color: var(--success);
+.item-card.checked .check-container {
+    background: var(--success);
     border-color: var(--success);
-    transform: rotate(10deg);
 }
 
-.checkmark:after {
-    content: "✓";
-    position: absolute;
-    display: none;
+.check-container::after {
+    content: '✓';
     color: white;
     font-weight: 800;
-    left: 7px;
-    top: 2px;
+    display: none;
 }
 
-.check-wrapper input:checked ~ .checkmark:after {
-    display: block;
-}
+.item-card.checked .check-container::after { display: block; }
 
 .item-text {
     flex: 1;
-    font-weight: 600;
-    font-size: 1.05rem;
-    transition: all 0.3s;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    transition: 0.3s;
 }
 
-.item-node.checked .item-text {
-    color: var(--text-muted);
+.item-card.checked .item-text {
     text-decoration: line-through;
-    opacity: 0.6;
+    opacity: 0.4;
 }
 
 .delete-btn {
     background: #fee2e2;
-    color: var(--danger);
+    color: #ef4444;
     border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
     cursor: pointer;
-    opacity: 0.6;
+    opacity: 0;
     transition: 0.2s;
 }
 
-.delete-btn:hover { opacity: 1; background: var(--danger); color: white; }
+.item-card:hover .delete-btn { opacity: 1; }
 
-/* Empty State */
-.empty-state {
+.empty-view {
     text-align: center;
-    margin-top: 60px;
-    color: var(--text-muted);
-}
-
-.icon-circle {
-    font-size: 3rem;
-    margin-bottom: 15px;
+    margin-top: 50px;
+    color: var(--accent);
+    font-weight: 600;
+    opacity: 0.7;
 }
