@@ -1,19 +1,22 @@
 // Banco de Dados Principal
-let storageData = JSON.parse(localStorage.getItem('smartlist_v8')) || {
+let storageData = JSON.parse(localStorage.getItem('smartlist_v9')) || {
     lists: []
 };
 
 let currentListId = null;
 
-// Elementos
+// Elementos Principais
 const homeScreen = document.getElementById('home-screen');
 const listDetailScreen = document.getElementById('list-detail-screen');
 const listsGrid = document.getElementById('lists-grid');
 const shoppingListUl = document.getElementById('shopping-list-ul');
 const listTitleDisp = document.getElementById('current-list-title');
 
-// --- NAVEGAÇÃO ---
+// Mostrar a data de hoje (para a tela interna)
+const hoje = new Date();
+document.getElementById('current-date').innerText = hoje.toLocaleDateString('pt-br', { day: 'numeric', month: 'short' });
 
+// --- NAVEGAÇÃO ---
 function showHome() {
     homeScreen.style.display = 'block';
     listDetailScreen.style.display = 'none';
@@ -23,18 +26,24 @@ function showHome() {
 function showList(listId) {
     currentListId = listId;
     const list = storageData.lists.find(l => l.id === listId);
-    listTitleDisp.innerText = list.name;
-    homeScreen.style.display = 'none';
-    listDetailScreen.style.display = 'block';
-    renderItems();
+    if(list) {
+        listTitleDisp.innerText = list.name;
+        homeScreen.style.display = 'none';
+        listDetailScreen.style.display = 'block';
+        renderItems();
+    }
 }
 
-// --- LOGICA DA HOME ---
-
+// --- LÓGICA DA HOME ---
 function renderHome() {
     listsGrid.innerHTML = '';
     if (storageData.lists.length === 0) {
-        listsGrid.innerHTML = '<p style="text-align:center; color: #555; padding: 20px;">Nenhuma lista criada.</p>';
+        listsGrid.innerHTML = `
+            <div style="text-align:center; padding: 40px 20px; color: var(--border);">
+                <i class="fas fa-ghost" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                <p>Nenhum registro encontrado. Inicie uma nova lista.</p>
+            </div>
+        `;
         return;
     }
 
@@ -53,22 +62,26 @@ function renderHome() {
     });
 }
 
-document.getElementById('create-list-btn').onclick = () => {
-    const name = prompt("Nome da nova lista:");
-    if (name) {
-        const newList = {
-            id: Date.now(),
-            name: name,
-            items: []
-        };
-        storageData.lists.push(newList);
-        saveToStorage();
-        showList(newList.id);
-    }
-};
+// FIX: Botão Criar Lista com EventListener seguro
+const createListBtn = document.getElementById('create-list-btn');
+if (createListBtn) {
+    createListBtn.addEventListener('click', () => {
+        const name = prompt("Defina um nome para sua lista:");
+        
+        if (name && name.trim() !== "") {
+            const newList = {
+                id: Date.now(), // Gera um ID único baseado na data
+                name: name.trim(),
+                items: []
+            };
+            storageData.lists.push(newList);
+            saveToStorage();
+            showList(newList.id);
+        }
+    });
+}
 
-// --- LOGICA DA LISTA INTERNA ---
-
+// --- LÓGICA DA LISTA INTERNA ---
 function renderItems() {
     const list = storageData.lists.find(l => l.id === currentListId);
     shoppingListUl.innerHTML = '';
@@ -76,18 +89,27 @@ function renderItems() {
     list.items.forEach((item, index) => {
         const li = document.createElement('li');
         li.className = `list-item ${item.bought ? 'bought' : ''}`;
+        
+        // Formata a data se existir
+        let dataStr = '';
+        if (item.date) {
+            const p = item.date.split('-');
+            dataStr = `<br><small style="color: var(--primary); font-size: 0.75rem;">📅 ${p[2]}/${p[1]}</small>`;
+        }
+
         li.innerHTML = `
             <div class="check-box" onclick="toggleItem(${index})"></div>
             <div class="item-content" onclick="toggleItem(${index})">
                 <span class="item-text">${item.name}</span>
-                <br><small style="color: var(--primary)">${item.date || ''}</small>
+                ${dataStr}
             </div>
-            <button class="btn-icon" onclick="deleteItem(${index})" style="color: var(--danger)">✕</button>
+            <button class="btn-icon" onclick="deleteItem(${index})" style="color: var(--danger)"><i class="fas fa-times"></i></button>
         `;
         shoppingListUl.appendChild(li);
     });
 }
 
+// Adicionar Item
 document.getElementById('add-btn').onclick = () => {
     const input = document.getElementById('item-input');
     const dateInput = document.getElementById('date-input');
@@ -101,6 +123,8 @@ document.getElementById('add-btn').onclick = () => {
     });
     
     input.value = "";
+    dateInput.value = "";
+    input.focus();
     renderItems();
 };
 
@@ -116,15 +140,26 @@ window.deleteItem = (index) => {
     renderItems();
 };
 
+// Botão Salvar Premium
 document.getElementById('save-btn').onclick = () => {
     saveToStorage();
-    alert("Progresso salvo com sucesso!");
+    
+    // Efeito visual no botão para confirmar salvamento
+    const btnText = document.querySelector('.btn-save-premium .btn-text');
+    const textoOriginal = btnText.innerText;
+    btnText.innerText = "✓ SALVO";
+    setTimeout(() => {
+        btnText.innerText = textoOriginal;
+    }, 2000);
 };
 
-document.getElementById('back-btn').onclick = showHome;
+document.getElementById('back-btn').onclick = () => {
+    saveToStorage(); // Auto-salva ao voltar
+    showHome();
+};
 
 document.getElementById('clear-all').onclick = () => {
-    if (confirm("Remover esta lista permanentemente?")) {
+    if (confirm("Deseja apagar esta lista inteira do sistema?")) {
         storageData.lists = storageData.lists.filter(l => l.id !== currentListId);
         saveToStorage();
         showHome();
@@ -132,18 +167,24 @@ document.getElementById('clear-all').onclick = () => {
 };
 
 function saveToStorage() {
-    localStorage.setItem('smartlist_v8', JSON.stringify(storageData));
+    localStorage.setItem('smartlist_v9', JSON.stringify(storageData));
 }
 
 // Compartilhar WhatsApp
 document.getElementById('share-btn').onclick = () => {
     const list = storageData.lists.find(l => l.id === currentListId);
+    if(list.items.length === 0) return alert("A lista está vazia!");
+    
     let msg = `*${list.name}*\n\n`;
     list.items.forEach(i => {
-        if (!i.bought) msg += `• ${i.name} ${i.date ? '('+i.date+')' : ''}\n`;
+        if (!i.bought) {
+            let d = '';
+            if (i.date) { const p = i.date.split('-'); d = ` [${p[2]}/${p[1]}]`; }
+            msg += `• ${i.name}${d}\n`;
+        }
     });
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`);
 };
 
-// Início
+// Iniciar a aplicação
 showHome();
