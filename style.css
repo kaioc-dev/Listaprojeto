@@ -1,51 +1,73 @@
 :root {
-    --bg-blue: #e3f2fd;
-    --primary: #007bff;
-    --white: #ffffff;
-    --text: #1e293b;
-    --success: #10b981;
-    --danger: #ff4d4d;
-    --border: #cbd5e1;
+    --bg-dark: #0f172a;
+    --surface: #1e293b;
+    --primary: #00f3ff; /* Ciano Neon */
+    --primary-glow: rgba(0, 243, 255, 0.3);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #39ff14; /* Verde Neon */
+    --danger: #ff003c;  /* Vermelho Neon */
+    --danger-glow: rgba(255, 0, 60, 0.3);
+    --border-color: #334155;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sora', sans-serif; }
 
-body { background-color: var(--bg-blue); display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+body { 
+    background-color: var(--bg-dark); 
+    color: var(--text-main);
+    display: flex; 
+    justify-content: center; 
+    padding: 20px; 
+    min-height: 100vh; 
+}
 
 .app-card { width: 100%; max-width: 450px; }
 
 header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
 
-h1 { font-size: 2.2rem; font-weight: 800; color: var(--text); letter-spacing: -1.5px; }
-h1 span { color: var(--primary); }
+h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+h1 .highlight { color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
 
-#current-date { font-size: 0.85rem; color: var(--primary); font-weight: 700; text-transform: uppercase; }
+#current-date { font-size: 0.85rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
 
-.btn-clear { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 10px; font-weight: 800; font-size: 0.7rem; cursor: pointer; }
+.header-actions { display: flex; gap: 10px; }
 
-.input-group { background: var(--white); display: flex; padding: 8px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 30px; }
+.btn-share { background: transparent; color: #25D366; border: 1px solid #25D366; padding: 8px 12px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.3s; }
+.btn-share:hover { background: #25D366; color: var(--bg-dark); box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
 
-#item-input { flex: 1; border: none; outline: none; padding: 12px 15px; font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.btn-clear { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 8px 12px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+.btn-clear:hover { background: var(--danger); color: white; box-shadow: 0 0 15px var(--danger-glow); }
 
-#add-btn { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 15px; font-size: 1.8rem; font-weight: 800; cursor: pointer; }
+.input-group { background: var(--surface); display: flex; padding: 8px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 30px; transition: 0.3s; }
+.input-group:focus-within { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+#item-input { flex: 1; border: none; outline: none; background: transparent; padding: 12px; font-size: 1rem; font-weight: 700; color: var(--text-main); }
+#item-input::placeholder { color: var(--text-muted); }
+
+#date-input { background: transparent; border: none; border-left: 1px solid var(--border-color); color: var(--primary); padding: 0 10px; font-family: 'Sora'; outline: none; color-scheme: dark; cursor: pointer; }
+
+#add-btn { background: var(--primary); color: var(--bg-dark); border: none; width: 45px; height: 45px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
+#add-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary-glow); }
 
 /* LINHA DO ITEM */
-.list-item { background: var(--white); margin-bottom: 12px; padding: 16px; border-radius: 18px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+.list-item { background: var(--surface); margin-bottom: 12px; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; }
+.list-item:hover { border-color: var(--text-muted); }
 
-.item-num { font-weight: 800; color: var(--primary); min-width: 30px; font-size: 0.9rem; }
+.item-num { font-weight: 800; color: var(--primary); min-width: 25px; font-size: 0.9rem; }
 
-.check-box { width: 30px; height: 30px; border: 3px solid var(--border); border-radius: 10px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+.check-box { width: 25px; height: 25px; border: 2px solid var(--primary); border-radius: 6px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 0 5px var(--primary-glow); }
 
-.list-item.bought .check-box { background-color: var(--success); border-color: var(--success); }
-
-.check-box::after { content: '✓'; color: white; font-weight: 900; font-size: 1.2rem; display: none; }
-
+.list-item.bought { opacity: 0.6; border-color: transparent; }
+.list-item.bought .check-box { background-color: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); }
+.check-box::after { content: '✓'; color: var(--bg-dark); font-weight: 900; font-size: 1rem; display: none; }
 .list-item.bought .check-box::after { display: block; }
 
-.item-text { flex: 1; font-weight: 700; font-size: 1.1rem; color: var(--text); cursor: pointer; }
+.item-content { flex: 1; display: flex; flex-direction: column; cursor: pointer; }
+.item-text { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
+.item-date { font-size: 0.75rem; color: var(--primary); margin-top: 3px; font-weight: 400; }
 
-.list-item.bought .item-text { text-decoration: line-through; color: #94a3b8; }
+.list-item.bought .item-text { text-decoration: line-through; color: var(--text-muted); }
 
-.delete-btn { background: none; border: none; color: #cbd5e1; font-size: 1.2rem; cursor: pointer; padding: 5px; }
-
-.delete-btn:hover { color: var(--danger); }
+.delete-btn { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; padding: 5px; transition: 0.2s; }
+.delete-btn:hover { color: var(--danger); text-shadow: 0 0 8px var(--danger-glow); }
