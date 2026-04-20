@@ -1,4 +1,3 @@
-// 1. Pegar os elementos da tela
 const input = document.getElementById('item-input');
 const inputDate = document.getElementById('date-input');
 const btnAdd = document.getElementById('add-btn');
@@ -6,113 +5,103 @@ const listaUl = document.getElementById('shopping-list-ul');
 const btnLimpar = document.getElementById('clear-all');
 const dataTxt = document.getElementById('current-date');
 const btnShare = document.getElementById('share-btn');
+const btnSave = document.getElementById('save-btn');
+const emptyMsg = document.getElementById('empty-msg');
+const listTitleDisp = document.getElementById('list-title');
 
-// 2. Mostrar a data de hoje
+// 1. Gerenciar Nome da Lista
+let nomeDaLista = localStorage.getItem('smartlist_name');
+
+function definirNome() {
+    if (!nomeDaLista) {
+        nomeDaLista = prompt("Dê um nome para sua nova lista (Ex: Mercado, Churrasco):");
+        if (!nomeDaLista || nomeDaLista.trim() === "") nomeDaLista = "Minha";
+        localStorage.setItem('smartlist_name', nomeDaLista);
+    }
+    listTitleDisp.innerText = nomeDaLista;
+}
+
+// 2. Data de hoje
 const hoje = new Date();
-dataTxt.innerText = hoje.toLocaleDateString('pt-br', { weekday: 'long', day: 'numeric', month: 'long' });
+dataTxt.innerText = hoje.toLocaleDateString('pt-br', { day: 'numeric', month: 'short' });
 
-// 3. Banco de dados (carrega do celular ou começa vazio)
-let itens = JSON.parse(localStorage.getItem('lista_v6')) || [];
+// 3. Dados
+let itens = JSON.parse(localStorage.getItem('lista_v7')) || [];
 
-// Formatar data de YYYY-MM-DD para DD/MM
 function formatarData(dataString) {
     if (!dataString) return '';
     const partes = dataString.split('-');
     return `${partes[2]}/${partes[1]}`;
 }
 
-// 4. Função para desenhar a lista (RENDERIZAR)
+// 4. Renderizar
 function atualizarTela() {
     listaUl.innerHTML = '';
     
-    itens.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.className = `list-item ${item.comprado ? 'bought' : ''}`;
-        
-        // Se houver data agendada, exibe. Se não, oculta o elemento.
-        const dataTag = item.data ? `<span class="item-date">📅 Agendado: ${formatarData(item.data)}</span>` : '';
+    if (itens.length === 0) {
+        emptyMsg.style.display = 'flex';
+    } else {
+        emptyMsg.style.display = 'none';
+        itens.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = `list-item ${item.comprado ? 'bought' : ''}`;
+            const dataTag = item.data ? `<span class="item-date">📅 ${formatarData(item.data)}</span>` : '';
 
-        li.innerHTML = `
-            <span class="item-num">${index + 1}.</span>
-            <div class="check-box" onclick="marcarItem(${index})"></div>
-            <div class="item-content" onclick="marcarItem(${index})">
-                <span class="item-text">${item.nome}</span>
-                ${dataTag}
-            </div>
-            <button class="delete-btn" onclick="deletarItem(${index})">✕</button>
-        `;
-        
-        listaUl.appendChild(li);
-    });
-
-    localStorage.setItem('lista_v6', JSON.stringify(itens));
+            li.innerHTML = `
+                <div class="check-box" onclick="marcarItem(${index})"></div>
+                <div class="item-content" onclick="marcarItem(${index})">
+                    <span class="item-text">${item.nome}</span>
+                    ${dataTag}
+                </div>
+                <button class="delete-btn" onclick="deletarItem(${index})"><i class="fas fa-times"></i></button>
+            `;
+            listaUl.appendChild(li);
+        });
+    }
+    // Auto-salvamento silencioso
+    localStorage.setItem('lista_v7', JSON.stringify(itens));
 }
 
-// 5. FUNÇÃO PRINCIPAL: ADICIONAR ITEM
+// 5. Funções
 function adicionarNovoItem() {
     const nomeItem = input.value.trim();
-    const dataAgendada = inputDate.value;
-    
     if (nomeItem !== "") {
-        itens.unshift({ 
-            nome: nomeItem, 
-            comprado: false,
-            data: dataAgendada // Salva a data no objeto
-        });
-        
-        input.value = ""; 
-        inputDate.value = ""; 
-        input.focus();    
-        atualizarTela();  
-    } else {
-        alert("Digite o nome de um produto!");
+        itens.unshift({ nome: nomeItem, comprado: false, data: inputDate.value });
+        input.value = ""; inputDate.value = ""; input.focus();
+        atualizarTela();
     }
 }
 
-// 6. Funções de marcar e deletar
-window.marcarItem = (index) => {
-    itens[index].comprado = !itens[index].comprado;
-    atualizarTela();
+window.marcarItem = (index) => { itens[index].comprado = !itens[index].comprado; atualizarTela(); };
+window.deletarItem = (index) => { itens.splice(index, 1); atualizarTela(); };
+
+btnSave.onclick = () => {
+    localStorage.setItem('lista_v7', JSON.stringify(itens));
+    alert("Lista salva com sucesso no dispositivo!");
 };
 
-window.deletarItem = (index) => {
-    itens.splice(index, 1);
-    atualizarTela();
-};
-
-// 7. Funções de Ações Extras (Limpar e Compartilhar)
 btnLimpar.onclick = () => {
-    if (itens.length === 0) return alert("A lista já está vazia!");
-    if (confirm("Apagar toda a lista de compras?")) {
+    if (confirm("Limpar toda a lista?")) {
         itens = [];
         atualizarTela();
     }
 };
 
 btnShare.onclick = () => {
-    if (itens.length === 0) return alert("Adicione itens antes de compartilhar!");
-    
-    let textoMsg = "🛒 *Lista de Compras - SmartList*\n\n";
-    
+    if (itens.length === 0) return alert("Lista vazia!");
+    let textoMsg = `🛒 *${nomeDaLista} List*\n\n`;
     itens.forEach((item) => {
-        let status = item.comprado ? "✅" : "⬜";
-        let dataStr = item.data ? ` (Para ${formatarData(item.data)})` : "";
-        textoMsg += `${status} ${item.nome}${dataStr}\n`;
+        if (!item.comprado) {
+            let dataStr = item.data ? ` [${formatarData(item.data)}]` : "";
+            textoMsg += `• ${item.nome}${dataStr}\n`;
+        }
     });
-    
-    // Abre o link do WhatsApp
-    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(textoMsg)}`;
-    window.open(url, '_blank');
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textoMsg)}`, '_blank');
 };
 
-// 8. EVENTOS (O que faz o botão funcionar)
-btnAdd.onclick = adicionarNovoItem; 
+btnAdd.onclick = adicionarNovoItem;
+input.onkeypress = (e) => { if (e.key === 'Enter') adicionarNovoItem(); };
 
-input.onkeypress = (e) => {         
-    if (e.key === 'Enter') {
-        adicionarNovoItem();
-    }
-};
-
-// Inicia a lista quando abre o app
+// Início
+definirNome();
 atualizarTela();
