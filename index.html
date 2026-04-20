@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SmartList Pro</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="app-card">
         <header>
             <div class="logo">
-                <h1>Smart<span>List</span></h1>
+                <h1>Smart<span class="highlight">List</span></h1>
                 <p id="current-date"></p>
             </div>
-            <button id="clear-all" class="btn-clear">Limpar Tudo</button>
+            <div class="header-actions">
+                <button id="share-btn" class="btn-share" title="Enviar para o WhatsApp">📱 Zap</button>
+                <button id="clear-all" class="btn-clear" title="Limpar Tudo">✕</button>
+            </div>
         </header>
 
         <div class="input-group">
             <input type="text" id="item-input" placeholder="O que vais comprar?" autocomplete="off">
-            <button type="button" id="add-btn">+</button>
+            <input type="date" id="date-input" title="Agendar compra">
+            <button type="button" id="add-btn">►</button>
         </div>
 
         <ul id="shopping-list-ul">
