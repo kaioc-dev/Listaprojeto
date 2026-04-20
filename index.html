@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SmartList Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
@@ -12,23 +13,38 @@
     <div class="app-card">
         <header>
             <div class="logo">
-                <h1>Smart<span class="highlight">List</span></h1>
+                <h1><span id="list-title">Smart</span><span class="highlight">List</span></h1>
                 <p id="current-date"></p>
             </div>
             <div class="header-actions">
-                <button id="share-btn" class="btn-share" title="Enviar para o WhatsApp">📱 Zap</button>
-                <button id="clear-all" class="btn-clear" title="Limpar Tudo">✕</button>
+                <button id="share-btn" class="btn-share" title="Enviar para o WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </button>
+                <button id="clear-all" class="btn-clear" title="Limpar Tudo">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
             </div>
         </header>
 
         <div class="input-group">
             <input type="text" id="item-input" placeholder="O que vais comprar?" autocomplete="off">
-            <input type="date" id="date-input" title="Agendar compra">
-            <button type="button" id="add-btn">►</button>
+            <input type="date" id="date-input">
+            <button type="button" id="add-btn"><i class="fas fa-plus"></i></button>
         </div>
 
-        <ul id="shopping-list-ul">
-            </ul>
+        <div class="list-container">
+            <ul id="shopping-list-ul"></ul>
+            <div id="empty-msg" class="empty-state">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Sua lista está vazia</p>
+            </div>
+        </div>
+
+        <div class="footer-actions">
+            <button id="save-btn" class="btn-save">
+                <i class="fas fa-save"></i> Salvar Lista
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
